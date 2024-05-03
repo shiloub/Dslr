@@ -1,13 +1,20 @@
 from load_csv import load
-from stats import mean, median, first_quartile, third_quartile, std, var, min, max, count
+from stats import mean, median, first_quartile, third_quartile, std, min, max, count
 import pandas as pd
+import sys
 
 def main():
-    train = load("datasets/dataset_train.csv")
-    numerical = train.dtypes[train.dtypes == "float64"].index
+    if (len(sys.argv) != 2):
+        print("Error: one argument expected: dataPath")
+        exit(0)
+    train = load(sys.argv[1])
+    if (train is None):
+        print("Error loading the file")
+        exit(1)
+    numericalTypes = ["float64", "int64", "int32", "float32", "int16", "float16", "uint8", "uint16", "uint32", "uint"]
+    # numerical = train.dtypes[train.dtypes == "float64"].index
+    numerical = train.dtypes[train.dtypes.astype(str).isin(numericalTypes)].index
     numerical_train = train[numerical]
-    print(numerical_train.describe())
-    print(type(numerical_train.describe()))
     describe = {column : [count(numerical_train[column]),
                           mean(numerical_train[column]),
                           std(numerical_train[column]),
@@ -17,8 +24,14 @@ def main():
                           third_quartile(numerical_train[column]),
                           max(numerical_train[column])
                           ] for column in numerical_train.columns}
+    real_describe = numerical_train.describe()
+    del real_describe["Index"]
+    print(real_describe)
+    print("-----------------------------------------")
     describe = pd.DataFrame(describe)
-    describe.set_index(pd.Index(["Count", "Mean", "std", "min", "25%", "50%", "75%", "max"]), inplace = True)
+    del describe["Index"]
+    describe.set_index(pd.Index(["Count", "Mean", "Std", "Min", "25%", "50%", "75%", "Max"]), inplace = True)
+    print(describe - real_describe)
     print(describe)
 
 
