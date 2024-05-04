@@ -2,6 +2,7 @@ from load_csv import load
 from stats import mean, median, first_quartile, third_quartile, std, min, max, count
 import pandas as pd
 import sys
+from matplotlib import pyplot as plt
 
 def get_describe(datas) -> pd.DataFrame:
     numericalTypes = ["float64", "int64", "int32", "float32", "int16", "float16", "uint8", "uint16", "uint32", "uint"]
@@ -22,6 +23,12 @@ def get_describe(datas) -> pd.DataFrame:
     describe.set_index(pd.Index(["Count", "Mean", "Std", "Min", "25%", "50%", "75%", "Max"]), inplace = True)
     return describe
 
+def plot_box(datas):
+    datas.dropna(inplace=True)
+    plt.figure(figsize=(12, 9))
+    print(datas.columns)
+    plt.boxplot([datas[column] for column in datas.columns if column != "Arithmancy"])
+    plt.show()
 
 def main():
     if (len(sys.argv) != 2):
@@ -43,6 +50,7 @@ def main():
     print(real_describe)
     print("-----------------------------------------")
     print(get_describe(train))
+    plot_box(numerical_train)
 
 
 if __name__ == "__main__":
