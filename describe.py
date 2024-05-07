@@ -4,6 +4,7 @@ import pandas as pd
 import sys
 from matplotlib import pyplot as plt
 
+
 def get_describe(datas) -> pd.DataFrame:
     numericalTypes = ["float64", "int64", "int32", "float32", "int16", "float16", "uint8", "uint16", "uint32", "uint"]
     # numerical = train.dtypes[train.dtypes == "float64"].index
@@ -19,15 +20,25 @@ def get_describe(datas) -> pd.DataFrame:
                           max(numerical_datas[column])
                           ] for column in numerical_datas.columns}
     describe = pd.DataFrame(describe)
-    del describe["Index"]
     describe.set_index(pd.Index(["Count", "Mean", "Std", "Min", "25%", "50%", "75%", "Max"]), inplace = True)
     return describe
+
+def get_numerical_columns_normalized(datas):
+    numericalTypes = ["float64", "int64", "int32", "float32", "int16", "float16", "uint8", "uint16", "uint32", "uint"]
+    numerical = datas.dtypes[datas.dtypes.astype(str).isin(numericalTypes)].index
+    numerical_datas = datas[numerical]
+    del numerical_datas["Index"]
+    normalized = numerical_datas.copy()
+    for column in normalized.columns:
+        normalized[column] = normalized[column].apply(lambda x: (x - normalized[column].min()) / (normalized[column].max() - normalized[column].min()))
+    return normalized
 
 def plot_box(datas):
     datas.dropna(inplace=True)
     plt.figure(figsize=(12, 9))
     print(datas.columns)
-    plt.boxplot([datas[column] for column in datas.columns if column != "Arithmancy"])
+    plt.boxplot([datas[column] for column in datas.columns if column != "Arithmancy"], labels=[column for column in datas.columns if column != "Arithmancy"])
+    plt.xticks(rotation=45)
     plt.show()
 
 def main():
@@ -38,18 +49,12 @@ def main():
     if (train is None):
         print("Error loading the file")
         exit(1)
-    del train["Charms"]
-    del train["Flying"]
-    del train["Astronomy"]
-    numericalTypes = ["float64", "int64", "int32", "float32", "int16", "float16", "uint8", "uint16", "uint32", "uint"]
-    # numerical = train.dtypes[train.dtypes == "float64"].index
-    numerical = train.dtypes[train.dtypes.astype(str).isin(numericalTypes)].index
-    numerical_train = train[numerical]
-    real_describe = numerical_train.describe()
-    del real_describe["Index"]
-    print(real_describe)
-    print("-----------------------------------------")
-    print(get_describe(train))
+    numerical_train = get_numerical_columns_normalized(train)
+    # real_describe = numerical_train.describe()
+    # del real_describe["Index"]
+    # print(real_describe)
+    # print("-----------------------------------------")
+    # print(get_describe(train))
     plot_box(numerical_train)
 
 
