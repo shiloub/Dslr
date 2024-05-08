@@ -2,7 +2,7 @@ from describe import get_numerical_columns_normalized
 from load_csv import load
 import pandas as pd
 from matplotlib import pyplot as plt
-from pandas import scatter_matrix
+from pandas.plotting import scatter_matrix
 
 
 def plot(datas, subject1, subject2):
@@ -18,4 +18,6 @@ if train is None:
     print("Error loading the file")
     exit(1)
 numerical_train = get_numerical_columns_normalized(train)
-numerical_train.plot()
+scatter_matrix(numerical_train)
+plt.
+plt.show()
