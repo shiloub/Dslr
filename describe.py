@@ -7,7 +7,6 @@ from matplotlib import pyplot as plt
 
 def get_describe(datas) -> pd.DataFrame:
     numericalTypes = ["float64", "int64", "int32", "float32", "int16", "float16", "uint8", "uint16", "uint32", "uint"]
-    # numerical = train.dtypes[train.dtypes == "float64"].index
     numerical = datas.dtypes[datas.dtypes.astype(str).isin(numericalTypes)].index
     numerical_datas = datas[numerical]
     describe = {column : [count(numerical_datas[column]),
