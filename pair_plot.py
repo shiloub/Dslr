@@ -18,6 +18,9 @@ if train is None:
     print("Error loading the file")
     exit(1)
 numerical_train = get_numerical_columns_normalized(train)
-scatter_matrix(numerical_train)
-plt.
+matrix = scatter_matrix(numerical_train, figsize=(16, 12))
+for ax in matrix.flatten():
+    ax.xaxis.label.set_rotation(45)
+    ax.yaxis.label.set_rotation(45)
+    ax.yaxis.label.set_position((-10, 0))
 plt.show()
