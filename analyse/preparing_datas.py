@@ -13,7 +13,4 @@ def prepare(path, house):
     train["Hogwarts House"] = train["Hogwarts House"].astype(bool)
     numerical_train = get_numerical_columns_normalized(train)
     numerical_train["Hogwarts House"] = train["Hogwarts House"]
-    # for column in numerical_train:
-    #     train[column] = numerical_train[column]
-    # numerical_train.drop("Index", axis=1, inplace=True)
     return numerical_train
