@@ -5,28 +5,13 @@ from loading import ft_tqdm
 def g(z):
     return 1 / (1 + np.exp(-z))
 
-def h(x, theta):
-    return g(scalaire(x, theta))
-
-def scalaire(x, theta):
-    result = 0
-    assert len(x) == len(theta)
-    for i in range(len(x)):
-        result += x[i] * theta[i]
-        # result += x.iloc[i] * theta[i]
-
-    return result
+def predict(x, theta):
+    return g(sum(xi * thetai for xi, thetai in zip(x, theta)))
 
 
-def gradient(train, theta, j):
-    houses = train["Hogwarts House"]
-    data = train.copy(deep=True)
-    del data["Hogwarts House"]
-    m = len(data)
-    sum_ = 0
-    for (i, x) in train.iterrows():
-        sum_ += (h(x, theta) - train["Hogwarts House"][i]) * x[j]
-    gradient = (1 / m) * sum_
+def gradient(x, y, theta, j):
+    sum_ = sum((predict(xi, theta) - int(y[i])) * xi.iloc[j] for i, xi in x.iterrows())
+    gradient = (1 / len(x)) * sum_
     return gradient
 
 
@@ -35,8 +20,16 @@ def gradient(train, theta, j):
 def logistic_regression(train, alpha):
     theta = [0.00001 for i in range(train.shape[1])]
     theta[0] = 1
+    houses = train["Hogwarts House"]
+    data = train.copy(deep=True)
+    del data["Hogwarts House"]
+    data['biais'] = 1
+
+    cols = data.columns.tolist()
+    cols = ['biais'] + [col for col in cols if col != 'biais']
+    data = data[cols]
     for k in ft_tqdm(range(1000)):
-       theta_temp = [theta[j] - alpha * gradient(train, theta, j) for j in range(0, len(theta))]
+       theta_temp = [theta[j] - alpha * gradient(data, houses, theta, j) for j in range(0, len(theta))]
        theta = theta_temp
     return theta
 
@@ -44,9 +37,16 @@ def logistic_regression(train, alpha):
 
 def main():
     gryffindor = prepare("datasets/dataset_train.csv", "Gryffindor")
-    # print(gryffindor.head())
-    # print(gryffindor.shape)
-    print(logistic_regression(gryffindor, 0.01))
+    slytherin = prepare("datasets/dataset_train.csv", "Slytherin")
+    ravenclaw = prepare("datasets/dataset_train.csv", "Ravenclaw")
+    hufflepuff = prepare("datasets/dataset_train.csv", "Hufflepuff")
+    # gryffindor.to_csv("./gryff.csv")
+
+    with open("theta.txt", mode="w") as file:
+        file.write(f"gryf:{logistic_regression(gryffindor, 0.1)}")
+        file.write(f"slyt:{logistic_regression(slytherin, 0.1)}")
+        file.write(f"rave:{logistic_regression(ravenclaw, 0.1)}")
+        file.write(f"huff:{logistic_regression(hufflepuff, 0.1)}")
 
 if __name__ == "__main__":
     main()

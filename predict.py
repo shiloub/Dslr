@@ -1,14 +1,19 @@
-from training import h
+from training import predict
 from analyse.preparing_datas import prepare
 
 def main():
-    theta = [0.7019953083882849, 0.045454916793040985, -0.6315497049397719, -0.5206862767127801, -0.13488016442974707, -0.31424198390008823, 0.13395902975029253, -0.7893727680864071, -0.8791161097824552, -0.4869195635310431, -0.2584135789522841, -0.5363576965063338, 0.2994594361787841, 1.0244991221643136]
+    theta = [0.9062190527998321, -0.09609555920688433, 0.9492003756034163, -1.8417226352773377, -1.0429613228035821, 0.6132612272626533, -0.48861779097084407, 1.6580702056621854, -2.330161349793085, -2.52215089463147, -0.9136497310016602, -0.1279728542113315, -1.2928502752905582, 2.106491668516121]
     data = prepare("datasets/dataset_train.csv", "Gryffindor")
     del data["Hogwarts House"]
+    data['biais'] = 1
+
+    cols = data.columns.tolist()
+    cols = ['biais'] + [col for col in cols if col != 'biais']
+    data = data[cols]
     print(data)
     for i, line in data.iterrows():
-        x = [1] + [y for y in line]
-        print(h(x, theta))
+        # x = [1] + [y for y in line]
+        print(predict(line, theta), "   ", i)
 
 
 if __name__ == "__main__":
