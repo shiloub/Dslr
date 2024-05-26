@@ -16,3 +16,18 @@ def prepare(path, house):
     numerical_train = get_numerical_columns_normalized(train)
     numerical_train["Hogwarts House"] = train["Hogwarts House"]
     return numerical_train
+
+def split_thetas(str):
+    thetas = [float(theta.strip("[] \n")) for theta in str.split(",")]
+    return thetas
+
+def get_thetas():
+    houses_thetas = {}
+    with open("theta.txt") as file:
+        line = file.readline()
+        while line:
+            house = line.split(":")[0]
+            weights = line.split(":")[1]
+            houses_thetas[house] = split_thetas(weights)
+            line = file.readline()
+    return (houses_thetas)
