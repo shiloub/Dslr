@@ -9,6 +9,8 @@ def prepare(path, house):
         exit (1)
 
     train.dropna(inplace=True)
+    train.to_csv("nona.csv")
+
     train["Hogwarts House"] = train["Hogwarts House"].apply(lambda x: 1 if x == house else 0).astype(int)
     train["Hogwarts House"] = train["Hogwarts House"].astype(bool)
     numerical_train = get_numerical_columns_normalized(train)

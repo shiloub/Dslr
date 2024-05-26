@@ -42,11 +42,16 @@ def main():
     hufflepuff = prepare("datasets/dataset_train.csv", "Hufflepuff")
     # gryffindor.to_csv("./gryff.csv")
 
+    gryff_weights = logistic_regression(gryffindor, 0.1)
+    slyth_weights = logistic_regression(slytherin, 0.1)
+    raven_weights = logistic_regression(ravenclaw, 0.1)
+    huffl_weights = logistic_regression(hufflepuff, 0.1)
+
     with open("theta.txt", mode="w") as file:
-        file.write(f"gryf:{logistic_regression(gryffindor, 0.1)}")
-        file.write(f"slyt:{logistic_regression(slytherin, 0.1)}")
-        file.write(f"rave:{logistic_regression(ravenclaw, 0.1)}")
-        file.write(f"huff:{logistic_regression(hufflepuff, 0.1)}")
+        file.write(f"gryf:{gryff_weights}\n")
+        file.write(f"slyt:{slyth_weights}\n")
+        file.write(f"rave:{raven_weights}\n")
+        file.write(f"huff:{huffl_weights}")
 
 if __name__ == "__main__":
     main()
