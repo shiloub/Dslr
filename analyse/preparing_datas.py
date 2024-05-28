@@ -31,3 +31,13 @@ def get_thetas():
             houses_thetas[house] = split_thetas(weights)
             line = file.readline()
     return (houses_thetas)
+
+def prepare_test(path):
+    test = load(path)
+    if test is None:
+        exit (1)
+    numerical_test = get_numerical_columns_normalized(test)
+
+    print(numerical_test.dropna().shape)
+    print(numerical_test.shape)
+    
