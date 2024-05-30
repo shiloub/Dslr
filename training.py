@@ -5,9 +5,11 @@ from loading import ft_tqdm
 def g(z):
     return 1 / (1 + np.exp(-z))
 
-def predict(x, theta):
-    return g(sum(xi * thetai for xi, thetai in zip(x, theta)))
 
+def predict(x, theta):
+    assert len(x) == len(theta)
+    return g(sum(xi * thetai for xi, thetai in zip(x, theta)))
+    
 
 def gradient(x, y, theta, j):
     sum_ = sum((predict(xi, theta) - int(y[i])) * xi.iloc[j] for i, xi in x.iterrows())

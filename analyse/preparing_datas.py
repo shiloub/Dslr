@@ -37,7 +37,4 @@ def prepare_test(path):
     if test is None:
         exit (1)
     numerical_test = get_numerical_columns_normalized(test)
-
-    print(numerical_test.dropna().shape)
-    print(numerical_test.shape)
-    
+    return numerical_test
