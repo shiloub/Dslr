@@ -1,4 +1,4 @@
-from analyse.preparing_datas import prepare, get_thetas, prepare_test
+from analyse.preparing_datas import get_thetas, prepare_test
 import pandas as pd
 from training import g
 
@@ -10,6 +10,7 @@ def find_subject(serie, subjects):
     return (positions)
 
 def predict(x, theta):
+    # print(len(x))
     temp_theta = theta.copy()
     temp_x = x.copy()
     if (x.isna().any()):
@@ -26,18 +27,12 @@ def predict(x, theta):
 
 def main():
     house_thetas = get_thetas()
-    # data = prepare("datasets/dataset_train.csv", "Gryffindor")
-    # del data["Hogwarts House"]
-    # data['biais'] = 1
     test = prepare_test("datasets/dataset_train.csv")
+    # test.dropna(inplace=True)
     test["biais"] = 1
     cols = test.columns.tolist()
     cols = ['biais'] + [col for col in cols if col != 'biais']
     test = test[cols]
-    # cols = data.columns.tolist()
-    # cols = ['biais'] + [col for col in cols if col != 'biais']
-    # data = data[cols]
-    # print(test)
     houses = []
     for i, line in test.iterrows():
         try:
@@ -52,11 +47,11 @@ def main():
         if max_ == slyt_score:
             houses.append("Slytherin")
         elif max_ == gryf_score:
-            houses.append("Gryffundor")
+            houses.append("Gryffindor")
         elif max_ == rave_score:
             houses.append("Ravenclaw")
         elif max_ == huff_score:
-            houses.append("Hufflepuf")
+            houses.append("Hufflepuff")
     houses = pd.DataFrame(houses)
     houses.columns = ["Hogwarts House"]
     houses["Index"] = houses.index

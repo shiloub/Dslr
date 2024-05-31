@@ -1,4 +1,4 @@
-from load_csv import load
+from utils.load_csv import load
 import pandas as pd
 from matplotlib import pyplot as plt
 

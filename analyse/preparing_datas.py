@@ -2,14 +2,39 @@ from utils.stats import mean, median, var
 from utils.load_csv import load
 from analyse.describe import get_numerical_columns_normalized
 import numpy as np
+import pandas as pd
 
-def prepare(path, house):
+
+def prepare_train(path, house):
     train = load(path)
     if train is None:
         exit (1)
 
+    Slytherins = train[train["Hogwarts House"] == "Slytherin"]
+    Ravenclaws = train[train["Hogwarts House"] == "Ravenclaw"]
+    Hufflepuffs = train[train["Hogwarts House"] == "Hufflepuff"]
+    Gryffindors = train[train["Hogwarts House"] == "Gryffindor"]
+
+    Slytherins_nona = pd.DataFrame()
+    Ravenclaws_nona = pd.DataFrame()
+    Hufflepuffs_nona = pd.DataFrame()
+    Gryffindors_nona = pd.DataFrame()
+
+    for column in get_numerical_columns_normalized(train).columns:
+        Slytherins_nona[column] = Slytherins[column].fillna(mean(Slytherins[column].dropna()))
+        Ravenclaws_nona[column] = Ravenclaws[column].fillna(mean(Ravenclaws[column].dropna()))
+        Hufflepuffs_nona[column] = Hufflepuffs[column].fillna(mean(Hufflepuffs[column].dropna()))
+        Gryffindors_nona[column] = Gryffindors[column].fillna(mean(Gryffindors[column].dropna()))
+
+    Slytherins_nona["Hogwarts House"] = "Slytherin"
+    Ravenclaws_nona["Hogwarts House"] = "Ravenclaw"
+    Hufflepuffs_nona["Hogwarts House"] = "Hufflepuff"
+    Gryffindors_nona["Hogwarts House"] = "Gryffindor"
+
+    train = pd.concat([Slytherins_nona, Ravenclaws_nona, Hufflepuffs_nona, Gryffindors_nona])
+    train["Index"] = train.index
+    train.sort_index(inplace=True)
     train.dropna(inplace=True)
-    train.to_csv("nona.csv")
 
     train["Hogwarts House"] = train["Hogwarts House"].apply(lambda x: 1 if x == house else 0).astype(int)
     train["Hogwarts House"] = train["Hogwarts House"].astype(bool)
@@ -36,5 +61,6 @@ def prepare_test(path):
     test = load(path)
     if test is None:
         exit (1)
+    del test["Hogwarts House"]
     numerical_test = get_numerical_columns_normalized(test)
     return numerical_test

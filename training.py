@@ -1,4 +1,4 @@
-from analyse.preparing_datas import prepare
+from analyse.preparing_datas import prepare_train
 import numpy as np
 from loading import ft_tqdm
 
@@ -19,7 +19,7 @@ def gradient(x, y, theta, j):
 
 
 
-def logistic_regression(train, alpha):
+def logistic_regression(train, alpha, nb_iteration):
     theta = [0.00001 for i in range(train.shape[1])]
     theta[0] = 1
     houses = train["Hogwarts House"]
@@ -30,7 +30,7 @@ def logistic_regression(train, alpha):
     cols = data.columns.tolist()
     cols = ['biais'] + [col for col in cols if col != 'biais']
     data = data[cols]
-    for k in ft_tqdm(range(1000)):
+    for k in ft_tqdm(range(nb_iteration)):
        theta_temp = [theta[j] - alpha * gradient(data, houses, theta, j) for j in range(0, len(theta))]
        theta = theta_temp
     return theta
@@ -38,16 +38,19 @@ def logistic_regression(train, alpha):
 
 
 def main():
-    gryffindor = prepare("datasets/dataset_train.csv", "Gryffindor")
-    slytherin = prepare("datasets/dataset_train.csv", "Slytherin")
-    ravenclaw = prepare("datasets/dataset_train.csv", "Ravenclaw")
-    hufflepuff = prepare("datasets/dataset_train.csv", "Hufflepuff")
+    gryffindor = prepare_train("datasets/dataset_train.csv", "Gryffindor")
+    slytherin = prepare_train("datasets/dataset_train.csv", "Slytherin")
+    ravenclaw = prepare_train("datasets/dataset_train.csv", "Ravenclaw")
+    hufflepuff = prepare_train("datasets/dataset_train.csv", "Hufflepuff")
     # gryffindor.to_csv("./gryff.csv")
 
-    gryff_weights = logistic_regression(gryffindor, 0.1)
-    slyth_weights = logistic_regression(slytherin, 0.1)
-    raven_weights = logistic_regression(ravenclaw, 0.1)
-    huffl_weights = logistic_regression(hufflepuff, 0.1)
+    alpha = 5
+    nb_ite = 20
+
+    gryff_weights = logistic_regression(gryffindor, alpha, nb_ite)
+    slyth_weights = logistic_regression(slytherin, alpha, nb_ite)
+    raven_weights = logistic_regression(ravenclaw, alpha, nb_ite)
+    huffl_weights = logistic_regression(hufflepuff, alpha, nb_ite)
 
     with open("theta.txt", mode="w") as file:
         file.write(f"gryf:{gryff_weights}\n")
