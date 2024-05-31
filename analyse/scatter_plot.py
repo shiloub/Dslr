@@ -1,6 +1,6 @@
 from describe import get_numerical_columns_normalized
-from load_csv import load
-from stats import mean
+from utils.load_csv import load
+from utils.stats import mean
 import pandas as pd
 from matplotlib import pyplot as plt
 
@@ -40,9 +40,9 @@ numerical_train = get_numerical_columns_normalized(train)
 #     for subject2 in train.columns[6:]:
 #         if (subject1 != subject2):
 #             plot(numerical_train, subject1, subject2)
-plot(numerical_train, "History of Magic", "Transfiguration")
-# plot(numerical_train, "Defense Against the Dark Arts", "Astronomy")
+# plot(numerical_train, "History of Magic", "Transfiguration")
+plot(numerical_train, "Defense Against the Dark Arts", "Astronomy")
 # print(numerical_train.corr())
 # print("-------------------------------------")
-print(get_corr_tab(numerical_train).loc["History of Magic", "Transfiguration"])
-# print(corr(numerical_train, "Defense Against the Dark Arts", "Astronomy"))
+# print(get_corr_tab(numerical_train).loc["History of Magic", "Transfiguration"])
+print(corr(numerical_train, "Defense Against the Dark Arts", "Astronomy"))

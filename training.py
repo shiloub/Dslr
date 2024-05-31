@@ -16,12 +16,9 @@ def gradient(x, y, theta, j):
     gradient = (1 / len(x)) * sum_
     return gradient
 
-
-
-
 def logistic_regression(train, alpha, nb_iteration):
-    theta = [0.00001 for i in range(train.shape[1])]
-    theta[0] = 1
+    theta = [0.01 for i in range(train.shape[1])]
+    theta[0] = 2
     houses = train["Hogwarts House"]
     data = train.copy(deep=True)
     del data["Hogwarts House"]
