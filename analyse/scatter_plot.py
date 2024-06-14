@@ -1,4 +1,4 @@
-from describe import get_numerical_columns_normalized
+from describe import get_numerical_columns_centered_and_scaled
 from utils.load_csv import load
 from utils.stats import mean
 import pandas as pd
@@ -35,14 +35,15 @@ train = load("datasets/dataset_train.csv")
 if train is None:
     print("Error loading the file")
     exit(1)
-numerical_train = get_numerical_columns_normalized(train)
+numerical_train = get_numerical_columns_centered_and_scaled(train)
+# this is how i found it:
+
 # for subject1 in train.columns[6:]:
 #     for subject2 in train.columns[6:]:
 #         if (subject1 != subject2):
 #             plot(numerical_train, subject1, subject2)
 # plot(numerical_train, "History of Magic", "Transfiguration")
+
+print(get_corr_tab(numerical_train))
 plot(numerical_train, "Defense Against the Dark Arts", "Astronomy")
-# print(numerical_train.corr())
-# print("-------------------------------------")
-# print(get_corr_tab(numerical_train).loc["History of Magic", "Transfiguration"])
 print(corr(numerical_train, "Defense Against the Dark Arts", "Astronomy"))

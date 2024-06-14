@@ -39,5 +39,11 @@ Slytherins = train[train["Hogwarts House"] == "Slytherin"]
 Ravenclaws = train[train["Hogwarts House"] == "Ravenclaw"]
 Hufflepuffs = train[train["Hogwarts House"] == "Hufflepuff"]
 Gryffindors = train[train["Hogwarts House"] == "Gryffindor"]
+
 for subject in train.columns[6:]:
     plot(subject)
+
+#The answer is:
+plot("Care of Magical Creatures")
+#or:
+plot("Arithmancy")

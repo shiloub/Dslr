@@ -1,4 +1,4 @@
-from describe import get_numerical_columns_normalized
+from describe import get_numerical_columns_centered_and_scaled
 from utils.load_csv import load
 from matplotlib import pyplot as plt
 from pandas.plotting import scatter_matrix
@@ -21,7 +21,7 @@ houses_colors = {"Slytherin": "green",
 
 train["color"] = [houses_colors[house] for house in train['Hogwarts House']]
 train.dropna(inplace=True)
-numerical_train = get_numerical_columns_normalized(train)
+numerical_train = get_numerical_columns_centered_and_scaled(train)
 for column in numerical_train:
     train[column] = numerical_train[column]
 print(train)

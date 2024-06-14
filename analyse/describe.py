@@ -30,16 +30,8 @@ def get_numerical_columns(datas):
     return(numerical_datas)
 
 
-# def get_numerical_columns_normalized(datas):
-#     numerical_datas = get_numerical_columns(datas)
-#     normalized = numerical_datas.copy()
-#     for column in normalized.columns:
-#         normalized[column] = normalized[column].apply(lambda x: (x - normalized[column].min()) / (normalized[column].max() - normalized[column].min()))
-#     return normalized
-
 def get_numerical_columns_centered_and_scaled(datas):
     numerical_datas = get_numerical_columns(datas)
-    # centered = numerical_datas.copy()
 
     colmeans = [mean(numerical_datas[column]) for column in numerical_datas.columns]
     centered = numerical_datas - colmeans
@@ -63,21 +55,25 @@ def main():
     if (train is None):
         print("Error loading the file")
         exit(1)
+    print("------------------------------------------")
+    print("|   Real describe function on raw data   |")
+    print("------------------------------------------")
+    print(train.describe())
+    print()
+    print("-----------------------------------------")
+    print("|   My describe function on raw data    |")
+    print("-----------------------------------------")
+    print(get_describe(train))
+    print()
     numerical_train = get_numerical_columns_centered_and_scaled(train)
-    real_describe = train.describe()
-
-    print("Real describe function on raw data:\n", real_describe)
-    print("-----------------------------------------")
-    print("My describe function on raw data:\n", get_describe(train))
-    print("--------------------------------------------")
-    print()
-    print()
-    print("--------------------------------------------")
-    real_describe = numerical_train.describe()
-
-    print("Real describe function on normalized data:\n", real_describe)
-    print("-----------------------------------------")
-    print("My describe function on normalize data:\n", get_describe(numerical_train))
+    print("-------------------------------------------")
+    print("|Real describe function on normalized data|")
+    print("-------------------------------------------")
+    print(numerical_train.describe())
+    print("------------------------------------------")
+    print("| My describe function on normalize data |")
+    print("------------------------------------------")
+    print(get_describe(numerical_train))
     plot_box(get_numerical_columns(train))
     plot_box(numerical_train)
 
