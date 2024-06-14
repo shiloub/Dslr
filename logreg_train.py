@@ -1,6 +1,8 @@
 from analyse.preparing_datas import prepare_train
 import numpy as np
 from loading import ft_tqdm
+from utils.load_csv import load
+import sys
 
 def g(z):
     return 1 / (1 + np.exp(-z))
@@ -28,7 +30,6 @@ def logistic_regression(train, alpha, nb_iteration):
     cols = ['biais'] + [col for col in cols if col != 'biais']
     data = data[cols]
     for k in ft_tqdm(range(nb_iteration)):
-       print(theta)
        theta_temp = [theta[j] - alpha * gradient(data, houses, theta, j) for j in range(0, len(theta))]
        theta = theta_temp
     return theta
@@ -36,10 +37,13 @@ def logistic_regression(train, alpha, nb_iteration):
 
 
 def main():
-    gryffindor = prepare_train("data/dataset_train.csv", "Gryffindor")
-    slytherin = prepare_train("data/dataset_train.csv", "Slytherin")
-    ravenclaw = prepare_train("data/dataset_train.csv", "Ravenclaw")
-    hufflepuff = prepare_train("data/dataset_train.csv", "Hufflepuff")
+    if (len(sys.argv) != 2):
+        print("Error: one argument expected: dataPath")
+        exit(0)
+    gryffindor = prepare_train(sys.argv[1], "Gryffindor")
+    slytherin = prepare_train(sys.argv[1], "Slytherin")
+    ravenclaw = prepare_train(sys.argv[1], "Ravenclaw")
+    hufflepuff = prepare_train(sys.argv[1], "Hufflepuff")
     # gryffindor.to_csv(
 
     alpha = 5

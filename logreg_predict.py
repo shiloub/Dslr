@@ -1,6 +1,7 @@
 from analyse.preparing_datas import get_thetas, prepare_test
 import pandas as pd
 from logreg_train import g
+import sys
 
 def find_subject(serie, subjects):
     positions = []
@@ -26,9 +27,11 @@ def predict(x, theta):
     return g(sum(xi * thetai for xi, thetai in zip(temp_x, temp_theta)))
 
 def main():
+    if (len(sys.argv) != 2):
+        print("Error: one argument expected: dataPath")
+        exit(0)
+    test = prepare_test(sys.argv[1])
     house_thetas = get_thetas()
-    test = prepare_test("data/dataset_train.csv")
-    test.dropna(inplace=True)
     test["biais"] = 1
     cols = test.columns.tolist()
     cols = ['biais'] + [col for col in cols if col != 'biais']
