@@ -1,6 +1,6 @@
 from analyse.preparing_datas import prepare_train
 import numpy as np
-from loading import ft_tqdm
+from utils.loading import ft_tqdm
 from utils.load_csv import load
 import sys
 
